@@ -240,5 +240,6 @@ Possible future extensions:
 
 Erandi Tharushika
 
-Electronic and Telecommunication Engineering
+Department of Electronic and Telecommunication Engineering
+
 University of Moratuwa
