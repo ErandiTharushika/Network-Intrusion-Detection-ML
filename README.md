@@ -2,39 +2,43 @@
 
 ## Overview
 
-This project implements a machine learning-based network intrusion detection system using the UNSW-NB15 cybersecurity dataset.
+This project implements a machine learning-based network intrusion detection system using the **UNSW-NB15 cybersecurity dataset**.
 
-The objective is to classify network traffic as either **normal traffic** or **malicious traffic** by analyzing network flow features and applying supervised machine learning algorithms.
+The objective is to classify network traffic as either **normal traffic** or **malicious traffic** by analyzing network flow characteristics and applying supervised machine learning algorithms.
 
 The project follows a complete machine learning workflow:
 
-* Data exploration
+* Exploratory Data Analysis
 * Data preprocessing
+* Feature engineering
 * Model training
 * Model evaluation
 * Hyperparameter optimization
-* Model saving for deployment
+* Final model selection and evaluation
 
 ---
 
-## Dataset
+# Dataset
 
 Dataset used:
 
 **UNSW-NB15 Network Intrusion Dataset**
 
-Download from: https://research.unsw.edu.au/projects/unsw-nb15-dataset
+Dataset source:
 
-The dataset contains network traffic records with various features describing communication behavior, including:
+https://research.unsw.edu.au/projects/unsw-nb15-dataset
+
+The dataset contains network traffic records with features describing communication behavior, including:
 
 * Protocol information
 * Service type
+* Connection state
 * Packet statistics
 * Byte transfer information
-* Connection behavior
 * Traffic timing characteristics
+* Network flow behavior
 
-The task is formulated as a binary classification problem:
+The task was formulated as a binary classification problem:
 
 | Label | Meaning        |
 | ----- | -------------- |
@@ -43,22 +47,20 @@ The task is formulated as a binary classification problem:
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```
 Network-Intrusion-Detection-ML/
 
 │
+├── assets/
+│   ├── final_confusion_matrix.png
+│   ├── final_roc_curve.png
+│   └── final_feature_importance.png
+│
 ├── data/
 │   ├── raw/
-│   │   ├── UNSW_NB15_training-set.csv
-│   │   └── UNSW_NB15_testing-set.csv
-│   │
 │   └── processed/
-│       ├── X_train_processed.csv
-│       ├── X_test_processed.csv
-│       ├── y_train.csv
-│       └── y_test.csv
 │
 ├── models/
 │   ├── preprocessor.pkl
@@ -69,7 +71,8 @@ Network-Intrusion-Detection-ML/
 │   ├── 02_Data_Preprocessing.ipynb
 │   ├── 03_Model_Training.ipynb
 │   ├── 04_Model_Evaluation.ipynb
-│   └── 05_Hyperparameter_Tuning.ipynb
+│   ├── 05_Hyperparameter_Tuning.ipynb
+│   └── 06_Final_Model_Evaluation.ipynb
 │
 ├── .gitignore
 ├── requirements.txt
@@ -78,78 +81,80 @@ Network-Intrusion-Detection-ML/
 
 ---
 
-## Machine Learning Pipeline
+# Machine Learning Pipeline
 
-### 1. Data Exploration
+## 1. Data Exploration
 
-Performed exploratory data analysis to understand:
+Exploratory data analysis was performed to understand:
 
-* Dataset distribution
-* Attack categories
-* Feature types
+* Dataset structure
+* Feature distributions
+* Attack category distribution
 * Class balance
 * Missing values
+* Categorical and numerical features
 
 ---
 
-### 2. Data Preprocessing
+## 2. Data Preprocessing
 
 The following preprocessing steps were applied:
 
 * Removed unnecessary `id` feature
 * Removed `attack_cat` to prevent target leakage
-* Separated features and labels
+* Separated features and target labels
 * Applied StandardScaler to numerical features
 * Applied OneHotEncoder to categorical features
-* Saved the preprocessing pipeline for future inference
+* Created a reusable preprocessing pipeline
+* Saved preprocessing components for future inference
 
 ---
 
-## Models Implemented
+# Models Implemented
 
-The following classification algorithms were evaluated:
+Multiple machine learning algorithms were trained and evaluated.
 
-### Logistic Regression
+## Logistic Regression
 
-Used as a baseline model.
+Used as a baseline classification model.
 
 Accuracy:
 
 ```
-81%
+81.0%
 ```
 
 ---
 
-### Decision Tree
+## Decision Tree
 
-Improved performance by learning nonlinear decision rules.
+A tree-based classifier capable of learning nonlinear decision boundaries.
 
 Accuracy:
 
 ```
-86%
+86.4%
 ```
 
 ---
 
-### Random Forest
+## Random Forest
 
-An ensemble model combining multiple decision trees.
+An ensemble model combining multiple decision trees to improve prediction performance.
 
 Accuracy:
 
 ```
-87%
+87.1%
 ```
 
 ---
 
-### Optimized Random Forest
+## Optimized Random Forest
 
-Hyperparameter tuning was performed using RandomizedSearchCV.
+Hyperparameter tuning was performed using **RandomizedSearchCV**.
 
-Final parameters:
+Best parameters:
 
 ```text
 n_estimators = 300
@@ -160,9 +165,22 @@ class_weight = balanced
 
 ---
 
-## Final Model Performance
+# Model Comparison
 
-The optimized Random Forest achieved:
+| Model                       |  Accuracy | Attack Recall |   ROC-AUC |
+| --------------------------- | --------: | ------------: | --------: |
+| Logistic Regression         |     81.0% |           97% |         - |
+| Decision Tree               |     86.4% |           96% |         - |
+| Random Forest               |     87.1% |           98% |     0.978 |
+| **Optimized Random Forest** | **90.5%** |       **97%** | **0.980** |
+
+The optimized Random Forest model was selected as the final model due to its improved overall performance.
+
+---
+
+# Final Model Performance
+
+The final optimized Random Forest classifier achieved:
 
 | Metric           | Score |
 | ---------------- | ----: |
@@ -172,34 +190,44 @@ The optimized Random Forest achieved:
 | Attack F1-score  |   92% |
 | ROC-AUC          | 0.980 |
 
-The high recall value indicates that the model can successfully identify most malicious network traffic samples.
+The high recall value is especially important for intrusion detection systems because it indicates that the model successfully identifies the majority of malicious network traffic.
 
 ---
 
-## Model Evaluation
+# Final Model Evaluation
 
-The model was evaluated using:
+The final model was evaluated using:
 
-* Accuracy
-* Precision
-* Recall
-* F1-score
 * Confusion Matrix
 * ROC Curve
 * ROC-AUC Score
 * Feature Importance Analysis
 
+## Confusion Matrix
+
+The confusion matrix shows the classification performance of the final optimized Random Forest model.
+
+![Confusion Matrix](assets/final_confusion_matrix.png)
+
+---
+
+## ROC Curve
+
+The ROC curve demonstrates the model's ability to distinguish between normal and malicious network traffic.
+
+![ROC Curve](assets/final_roc_curve.png)
+
 ---
 
 ## Feature Importance
 
-Random Forest feature importance analysis was performed to identify the network characteristics that contribute most to intrusion detection.
+Feature importance analysis was performed to identify the network characteristics that contribute most to intrusion detection.
 
-This helps improve interpretability and understand important traffic patterns associated with attacks.
+![Feature Importance](assets/final_feature_importance.png)
 
 ---
 
-## Technologies Used
+# Technologies Used
 
 * Python
 * Pandas
@@ -212,35 +240,76 @@ This helps improve interpretability and understand important traffic patterns as
 
 ---
 
-## Future Improvements
+# Installation
 
-Possible future extensions:
+Clone the repository:
 
-* Multi-class attack classification
+```bash
+git clone https://github.com/ErandiTharushika/Network-Intrusion-Detection-ML.git
+```
 
-  * DoS
-  * Exploits
-  * Reconnaissance
-  * Fuzzers
-  * Worms
-  * Other attack categories
+Navigate to the project directory:
 
-* Real-time network traffic prediction dashboard using Streamlit
+```bash
+cd Network-Intrusion-Detection-ML
+```
 
-* Comparison with advanced models:
+Install dependencies:
 
-  * XGBoost
-  * LightGBM
-  * Neural Networks
-
-* Deployment as an API service
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-## Author
+# Future Improvements
 
-Erandi Tharushika
+Possible future extensions:
 
-Department of Electronic and Telecommunication Engineering
+## Multi-class Attack Classification
 
+Instead of binary classification, classify individual attack categories:
+
+* DoS
+* Exploits
+* Reconnaissance
+* Fuzzers
+* Worms
+* Shellcode
+* Backdoor
+
+---
+
+## Real-Time Intrusion Detection Dashboard
+
+Develop a real-time monitoring dashboard using:
+
+* Streamlit
+* Flask
+* FastAPI
+
+---
+
+## Advanced Machine Learning Models
+
+Compare performance with:
+
+* XGBoost
+* LightGBM
+* Neural Networks
+* Deep Learning-based intrusion detection models
+
+---
+
+## Deployment
+
+Deploy the trained model as an API service for real-time network traffic classification.
+
+---
+
+# Author
+
+**Erandi Tharushika**
+
+Electronic and Telecommunication Engineering
 University of Moratuwa
