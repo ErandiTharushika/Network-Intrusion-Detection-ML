@@ -71,6 +71,7 @@ Network-Intrusion-Detection-ML/
 │   ├── 04_Model_Evaluation.ipynb
 │   └── 05_Hyperparameter_Tuning.ipynb
 │
+├── .gitignore
 ├── requirements.txt
 └── README.md
 ```
