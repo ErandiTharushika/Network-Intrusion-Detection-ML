@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Raw datasets
+Data/raw/
+
+# Processed datasets
+Data/processed/
+
+# Intermediate models
+models/logistic_regression_model.pkl
+models/decision_tree_model.pkl
+models/random_forest_model.pkl
+
+# OS files
+.DS_Store
+Thumbs.db
